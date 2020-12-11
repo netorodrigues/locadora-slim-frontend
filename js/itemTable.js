@@ -37,7 +37,34 @@ async function handleDelete(e, cell) {
 }
 
 async function handleLend(e, cell) {
-    alert("lend click!");
+    const responsibleName = prompt("Responsible name: ");
+    const responsibleEmail = prompt("Responsible email: ");
+
+    if (!isValidEmail(responsibleEmail)) {
+        alert("Invalid email received.")
+        return;
+    }
+
+    const row = cell.getRow()
+    const item = row.getData();
+    const itemId = item.id;
+
+    const createLendData = {
+        responsibleName,
+        responsibleEmail,
+        itemId
+    }
+
+    const response = await connection.post('/api/lend', createLendData);
+
+    if (response.id) {
+        row.delete();
+    }
+
+    function isValidEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
 }
 
 
