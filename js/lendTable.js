@@ -69,12 +69,8 @@ async function setupTable() {
         ],
     });
 
-    document.getElementById("add-item").addEventListener("click", function () {
-        table.addRow({});
-    });
-
-    document.getElementById("show-lend").addEventListener("click", function () {
-        location.href = "lend-table.html"
+    document.getElementById("show-item").addEventListener("click", function () {
+        location.href = "index.html"
     });
 }
 
