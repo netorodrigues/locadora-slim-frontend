@@ -16,6 +16,15 @@ function getConnection() {
             }
             return fetch(basePath + path, options)
                 .then(response => response.json());
+        },
+        put: function (path, data) {
+            const options = {
+                method: 'put',
+                body: JSON.stringify(data),
+            }
+
+            return fetch(basePath + path, options)
+                .then(response => response.json());
         }
     }
 }

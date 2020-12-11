@@ -2,16 +2,6 @@
 const connection = getConnection();
 var table;
 
-//define data array
-var tabledata = [
-    { id: 1, name: "Oli Bob", progress: 12, gender: "male", rating: 1, col: "red", dob: "19/02/1984", car: 1 },
-    { id: 2, name: "Mary May", progress: 1, gender: "female", rating: 2, col: "blue", dob: "14/05/1982", car: true },
-    { id: 3, name: "Christine Lobowski", progress: 42, gender: "female", rating: 0, col: "green", dob: "22/05/1982", car: "true" },
-    { id: 4, name: "Brendon Philips", progress: 100, gender: "male", rating: 1, col: "orange", dob: "01/08/1980" },
-    { id: 5, name: "Margret Marmajuke", progress: 16, gender: "female", rating: 5, col: "yellow", dob: "31/01/1999" },
-    { id: 6, name: "Frank Harbours", progress: 38, gender: "male", rating: 4, col: "red", dob: "12/05/1966", car: 1 },
-];
-
 async function editCheck(cell) {
     const itemData = cell.getRow().getData();
 
@@ -20,7 +10,13 @@ async function editCheck(cell) {
     if (!itemData.id) {
         const createdItem = await connection.post('/api/items', itemData);
         itemData.id = createdItem.id;
+        return;
     }
+
+    const itemId = itemData.id;
+    const { name, type } = itemData;
+
+    await connection.put(`/api/items/${itemId}`, { name, type });
 }
 
 function handleDelete(cell) {
