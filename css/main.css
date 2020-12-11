@@ -1,0 +1,9 @@
+.button{
+    padding: 10px;
+    margin: 10px;
+}
+
+.table, #button-container{
+    max-width: 95%;
+    margin: auto;
+}

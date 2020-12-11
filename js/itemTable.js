@@ -1,3 +1,6 @@
+
+const connection = getConnection();
+
 //define data array
 var tabledata = [
     { id: 1, name: "Oli Bob", progress: 12, gender: "male", rating: 1, col: "red", dob: "19/02/1984", car: 1 },
@@ -8,30 +11,49 @@ var tabledata = [
     { id: 6, name: "Frank Harbours", progress: 38, gender: "male", rating: 4, col: "red", dob: "12/05/1966", car: 1 },
 ];
 
+function editCheck(cell) {
+    alert('stuff was edited!')
+}
+
+function handleDelete(cell) {
+    alert("delete click!")
+}
+
+function handleLend(cell) {
+    alert("lend click!");
+}
+
 
 
 async function setupTable() {
-    const connection = getConnection();
     const itemData = await connection.get('/api/items');
 
     //initialize table
     var table = new Tabulator("#item-table", {
-        data: itemData,           //load row data from array
-        layout: "fitColumns",      //fit columns to width of table
-        responsiveLayout: "hide",  //hide columns that dont fit on the table
-        tooltips: true,            //show tool tips on cells
-        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        data: itemData,
+        layout: "fitColumns",
+        responsiveLayout: "hide",
+        tooltips: true,
+        addRowPos: "top",
         pagination: "local",
-        paginationSize: 6,       //paginate the data
+        paginationSize: 6,
         paginationSizeSelector: [3, 6, 8, 10],
-        resizableRows: true,       //allow row order to be changed
-        initialSort: [             //set the initial sort order of the data
+        resizableRows: true,
+        initialSort: [
             { column: "name", dir: "asc" },
-        ],         //set the initial sort order of the data
-        columns: [                 //define the table columns
-            { title: "Name", field: "name", editor: "input" },
-            { title: "Type", field: "type", width: 95, editor: "select", editorParams: { values: ["book", "cd", 'dvd'] } },
         ],
+        dataChanged: editCheck,
+        columns: [
+            { title: "Item Name", field: "name", editor: "input" },
+            { title: "Type", field: "type", width: 95, editor: "select", editorParams: { values: ["book", "cd", 'dvd'] } },
+            { title: "Delete", width: 90, hozAlign: "center", formatter: "buttonCross", headerSort: false, cellClick: handleDelete },
+            { title: "Lend Item", width: 100, hozAlign: "center", formatter: "buttonTick", headerSort: false, cellClick: handleLend },
+        ],
+    });
+
+    //select row on "select" button click
+    document.getElementById("add-item").addEventListener("click", function () {
+        table.selectRow(1);
     });
 }
 

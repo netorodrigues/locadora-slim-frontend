@@ -4,11 +4,17 @@
   <title></title>
   <meta content="">
   <link href="https://unpkg.com/tabulator-tables@4.9.1/dist/css/tabulator.min.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
   <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.1/dist/js/tabulator.min.js"></script>
 </head>
 
 <body>
-  <div id="item-table"></div>
+  <h1>Simple Locadora-Slim visualizer</h1>
+  <div id="button-container">
+    <button class="button" id="add-item">Add Item</button>
+    <button class="button" id="show-lend">Show Lend Items</button>
+  </div>
+  <div class="table" id="item-table"></div>
   <script src="js/connection.js"></script>
   <script src="js/itemTable.js"></script>
 </body>
