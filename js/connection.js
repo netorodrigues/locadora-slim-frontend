@@ -12,6 +12,9 @@ function getConnection() {
 
             const options = {
                 method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(data)
             }
             return fetch(basePath + path, options)
@@ -20,6 +23,9 @@ function getConnection() {
         put: function (path, data) {
             const options = {
                 method: 'put',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(data),
             }
 
