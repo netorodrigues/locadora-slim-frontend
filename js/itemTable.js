@@ -3,8 +3,8 @@ const connection = getConnection();
 var table;
 
 async function editCheck(cell) {
-    const itemData = cell.getRow().getData();
 
+    const itemData = cell.getRow().getData();
     if (!itemData.name || !itemData.type) return;
 
     if (!itemData.id) {
@@ -19,11 +19,24 @@ async function editCheck(cell) {
     await connection.put(`/api/items/${itemId}`, { name, type });
 }
 
-function handleDelete(cell) {
-    alert("delete click!")
+async function handleDelete(e, cell) {
+    const mustDelete = confirm(
+        "Are you sure that you want to delete this item?"
+    );
+
+    if (!mustDelete) return;
+
+    const row = cell.getRow();
+    const itemData = cell.getRow().getData();
+    const itemId = itemData.id;
+
+    const response = await connection.delete(`/api/items/${itemId}`);
+    if (response.deleted) {
+        row.delete()
+    }
 }
 
-function handleLend(cell) {
+async function handleLend(e, cell) {
     alert("lend click!");
 }
 

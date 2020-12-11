@@ -31,6 +31,15 @@ function getConnection() {
 
             return fetch(basePath + path, options)
                 .then(response => response.json());
+        },
+
+        delete: function (path) {
+            const options = {
+                method: 'delete'
+            }
+
+            return fetch(basePath + path, options)
+                .then(response => response.json());
         }
     }
 }
