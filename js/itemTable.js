@@ -8,21 +8,32 @@ var tabledata = [
     { id: 6, name: "Frank Harbours", progress: 38, gender: "male", rating: 4, col: "red", dob: "12/05/1966", car: 1 },
 ];
 
-//initialize table
-var table = new Tabulator("#example-table", {
-    data: tabledata,           //load row data from array
-    layout: "fitColumns",      //fit columns to width of table
-    responsiveLayout: "hide",  //hide columns that dont fit on the table
-    tooltips: true,            //show tool tips on cells
-    addRowPos: "top",          //when adding a new row, add it to the top of the table
-    history: true,             //allow undo and redo actions on the table
-    pagination: "local",
-    paginationSize: 6,       //paginate the data
-    paginationSizeSelector: [3, 6, 8, 10],
-    movableColumns: true,      //allow column order to be changed
-    resizableRows: true,       //allow row order to be changed
-    initialSort: [             //set the initial sort order of the data
-        { column: "name", dir: "asc" },
-    ],         //set the initial sort order of the data
-    autoColumns: true, //create columns from data field names
-});
+
+
+async function setupTable() {
+    const connection = getConnection();
+    const itemData = await connection.get('/api/items');
+
+    //initialize table
+    var table = new Tabulator("#item-table", {
+        data: itemData,           //load row data from array
+        layout: "fitColumns",      //fit columns to width of table
+        responsiveLayout: "hide",  //hide columns that dont fit on the table
+        tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        pagination: "local",
+        paginationSize: 6,       //paginate the data
+        paginationSizeSelector: [3, 6, 8, 10],
+        resizableRows: true,       //allow row order to be changed
+        initialSort: [             //set the initial sort order of the data
+            { column: "name", dir: "asc" },
+        ],         //set the initial sort order of the data
+        columns: [                 //define the table columns
+            { title: "Name", field: "name", editor: "input" },
+            { title: "Type", field: "type", width: 95, editor: "select", editorParams: { values: ["book", "cd", 'dvd'] } },
+        ],
+    });
+}
+
+setupTable();
+
