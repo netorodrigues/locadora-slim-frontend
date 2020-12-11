@@ -1,5 +1,6 @@
 
 const connection = getConnection();
+var table;
 
 //define data array
 var tabledata = [
@@ -11,8 +12,15 @@ var tabledata = [
     { id: 6, name: "Frank Harbours", progress: 38, gender: "male", rating: 4, col: "red", dob: "12/05/1966", car: 1 },
 ];
 
-function editCheck(cell) {
-    alert('stuff was edited!')
+async function editCheck(cell) {
+    const itemData = cell.getRow().getData();
+
+    if (!itemData.name || !itemData.type) return;
+
+    if (!itemData.id) {
+        const createdItem = await connection.post('/api/items', itemData);
+        itemData.id = createdItem.id;
+    }
 }
 
 function handleDelete(cell) {
@@ -29,8 +37,10 @@ async function setupTable() {
     const itemData = await connection.get('/api/items');
 
     //initialize table
-    var table = new Tabulator("#item-table", {
+    table = new Tabulator("#item-table", {
         data: itemData,
+        history: true,
+        cellEdited: editCheck,
         layout: "fitColumns",
         responsiveLayout: "hide",
         tooltips: true,
@@ -42,9 +52,8 @@ async function setupTable() {
         initialSort: [
             { column: "name", dir: "asc" },
         ],
-        dataChanged: editCheck,
         columns: [
-            { title: "Item Name", field: "name", editor: "input" },
+            { title: "Item Name", field: "name", editor: "input", },
             { title: "Type", field: "type", width: 95, editor: "select", editorParams: { values: ["book", "cd", 'dvd'] } },
             { title: "Delete", width: 90, hozAlign: "center", formatter: "buttonCross", headerSort: false, cellClick: handleDelete },
             { title: "Lend Item", width: 100, hozAlign: "center", formatter: "buttonTick", headerSort: false, cellClick: handleLend },
@@ -53,7 +62,7 @@ async function setupTable() {
 
     //select row on "select" button click
     document.getElementById("add-item").addEventListener("click", function () {
-        table.selectRow(1);
+        table.addRow({});
     });
 }
 
